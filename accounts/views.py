@@ -2,13 +2,13 @@ from django.shortcuts import render,redirect
 from django.views import View
 from .forms import UserRegistrationForm,VerifyCodeForm,UserLoginForm
 import random
-from utils import send_otp_code
+from utils import *
 from . models import OtpCode,User
 from django.utils import timezone
 from datetime import timedelta
 from django.contrib import messages
-from django.contrib.auth import login, logout, authenticate
-
+from django.contrib.auth import login,logout, authenticate
+from django.contrib.auth.mixins import LoginRequiredMixin
 
 
 class UserRegisterView(View):
@@ -54,12 +54,10 @@ class UserRegisterVerifyCode(View):
         if form.is_valid():
             cd=form.cleaned_data
             if timezone.now() > expiration_time:
-                 code_instance.delete()  
-                 messages.error(request, 'OTP code has expired. Please request a new one.', 'danger')
-                 return redirect('accounts:verify_code')
-                 
-            if cd['code']==code_instance.code:
-                
+                code_instance.delete()  
+                messages.error(request, 'OTP code has expired. Please request a new one.', 'danger')
+                return redirect('accounts:verify_code')
+            if cd['code']==code_instance.code:                
                 User.objects.create_user(user_session['phone_number'],user_session['email'],user_session['full_name'],user_session['password'])
                 code_instance.delete()
                 messages.success(request,'you registered successfully.','success')
@@ -68,10 +66,10 @@ class UserRegisterVerifyCode(View):
             else:
                 messages.error(request,'this code is wrong','danger')
                 return redirect('accounts:verify_code')
-                       
         return redirect('home:home')
         
-        
+    
+
 class UserLoginView(View):
     form_class=UserLoginForm
     templates_name='accounts/login.html'
@@ -92,4 +90,10 @@ class UserLoginView(View):
             messages.error(request,'phone or password is wrong', 'warning')
         return render(request,self.templates_name,{'form':form})
     
+
     
+class UserLogoutView(LoginRequiredMixin,View):
+    def get(self,request):
+        logout(request)
+        messages.success(request,'you logged out successfully','success')
+        return redirect('home:home')        

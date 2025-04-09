@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <div class="container" style="max-width: 600px; background: #F2BED1; padding: 20px; border-radius: 10px; text-align: center;">
+        <h2 style="color: #6A0572;">✅ سفارش شما با موفقیت ثبت شد!</h2>
+        <p style="font-size: 18px; color: #6A0572;">شماره سفارش: <strong>{{ order.id }}</strong></p>
+        <p style="font-size: 18px; color: #6A0572;">💰 مبلغ نهایی پرداخت شده: <strong>{{ order.get_total_price|floatformat:0 }} تومان</strong></p>
+        <a href="{% url 'home:home' %}" class="btn btn-primary" style="margin-top: 15px;">🏠 بازگشت به صفحه اصلی</a>
+    </div>
+{% endblock %}

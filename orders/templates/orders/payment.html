@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container" style="max-width: 600px; background: #F2BED1; padding: 20px; border-radius: 10px; box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2); text-align: center;">
+    <h2 style="color: #6A0572;">💖 پرداخت سفارش</h2>
+    <p style="color: #6A0572; font-size: 18px;">مبلغ قابل پرداخت: <strong>{{order.get_total_price }} تومان</strong></p>
+    <p>شماره سفارش: <strong>{{ order.id }}</strong></p>
+    <br>
+    <p>مقدار تخفیف: <strong>{{ order.discount }}%</strong></p>
+    
+    <p style="font-size: 16px; color: #6A0572; font-weight: bold;">🎟️ آیا کد تخفیف دارید؟</p>
+
+    <form action="{% url 'orders:apply_coupon' order.id %}" method="post"style="margin-bottom: 15px;">
+        {% csrf_token %}
+        <input type="text" name="code" placeholder="کد تخفیف را وارد کنید" style="
+        padding: 8px;
+        width: 70%;
+        border: 2px solid #6A0572;
+        border-radius: 5px;
+        outline: none;
+        text-align: center;" required >
+
+        <button type="submit" style=" background: #FF4081;
+        color: white;
+        font-size: 16px;
+        padding: 8px 15px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: all 0.3s ease-in-out;">
+        ✔️ اعمال تخفیف</button>
+
+    </form>
+
+    <br>
+
+    <a href="{% url 'orders:order_pay' order.id %}" class"btn" style="
+    background: #FF4081;
+    color: white;
+    font-size: 18px;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: all 0.3s ease-in-out;">💳 پرداخت</a>
+
+    <a href="{% url 'orders:cart' %}" style="display: block; margin-top: 10px; color: #6A0572; text-decoration: none;">🔙 بازگشت به سبد خرید</a>
+
+
+</div>
+{% endblock %}

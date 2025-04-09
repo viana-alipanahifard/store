@@ -23,9 +23,9 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-^=-%vklxkvjwua7iml^34#_=h5qt02c_&hn+2eb@-1y!3l%i#w'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG =True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -40,6 +40,8 @@ INSTALLED_APPS = [
     'accounts.apps.AccountsConfig',
     'home.apps.HomeConfig',
     'storages',
+    'django_celery_beat',
+    'orders.apps.OrdersConfig',
 ]
 
 MIDDLEWARE = [
@@ -65,6 +67,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'orders.context_proccecors.cart',
             ],
         },
     },
@@ -78,10 +81,24 @@ WSGI_APPLICATION = 'one.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'postgres',
+        'USER': 'viana',
+        'PASSWORD':'viana',
+        'HOST': '127.0.0.1',
+        'PORT':  '5432',
+            
+            }
+}
+CACHES = {
+    "default": {
+        "BACKEND": "django_redis.cache.RedisCache",
+        "LOCATION": "redis://127.0.0.1:6379/1",
+
     }
 }
+
+SESSION_ENGINE = "django.contrib.sessions.backends.cache"
 
 
 # Password validation
@@ -108,12 +125,11 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'Asia/Tehran'
 
 USE_I18N = True
 
 USE_TZ = True
-
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.1/howto/static-files/
@@ -125,10 +141,7 @@ STATICFILES_DIRS=[
 
 # #Media files
 # MEDIA_URL = 'https://vviiaannaamedias.s3.ir-thr-at1.arvanstorage.ir/'
-MEDIA_URL='https://vviiaannaamedias.s3-website.ir-thr-at1.arvanstorage.ir/'
-
 # MEDIA_ROOT = BASE_DIR / 'media'
-
 
 
 # Default primary key field type
@@ -142,15 +155,18 @@ AUTH_USER_MODEL='accounts.User'
 # #ABRARVAN CLOUD STORAGE
 
 DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
-
-AWS_ACCESS_KEY_ID = '1f1d643d-3a7f-4b93-9430-a1c02279d3ff'
-AWS_SECRET_ACCESS_KEY = 'd0693130c7f74ae30c99bc7287478feed1add4716ccc54f991ef55e8f7a43f94'
+MEDIA_URL = "https://vviiaannaamedias.s3.ir-thr-at1.arvanstorage.com/"
 AWS_SERVICE_NAME='s3'
-AWS_STORAGE_BUCKET_NAME = 'vviiaannaamedias' 
-AWS_S3_ENDPOINT_URL= 'https://s3.ir-thr-at1.arvanstorage.ir'
+AWS_ACCESS_KEY_ID = '*'
+AWS_SECRET_ACCESS_KEY = '*'
+AWS_STORAGE_BUCKET_NAME = 'vviiaannaamedias'
+AWS_S3_ENDPOINT_URL = 'https://s3.ir-thr-at1.arvanstorage.com'
 AWS_S3_FILE_OVERWRITE = False
 AWS_QUERYSTRING_AUTH = False
+AWS_LOCAL_STORAGE = f'{BASE_DIR}/aws/'
 
+
+APPEND_SLASH = False
 
 
 

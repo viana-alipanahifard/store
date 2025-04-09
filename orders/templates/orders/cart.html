@@ -1,0 +1,55 @@
+{% extends "base.html" %}
+
+ {% block content %}
+ <div class="container my-5">
+     <div class="card shadow-lg border-0 bg-light" style="border-radius: 15px;">
+         <div class="card-header text-center bg-danger bg-opacity-10" style="border-top-left-radius: 15px; border-top-right-radius: 15px;">
+             <h2 class="fw-bold text-danger">🛍️ سبد خرید شما</h2>
+         </div>
+         <div class="card-body">
+             <table class="table table-hover text-center align-middle">
+                 <thead class="table-danger">
+                     <tr>
+                         <th scope="col">#</th>
+                         <th scope="col">نام محصول</th>
+                         <th scope="col">تعداد</th>
+                         <th scope="col">قیمت واحد</th>
+                         <th scope="col">قیمت کل</th>
+                         <th scope="col">delete</th>
+                     </tr>
+                 </thead>
+                 <tbody>
+                     {% for item in cart %}
+                     <tr>
+                         <th scope="row">{{ forloop.counter }}</th>
+                         <td class="fw-bold">{{ item.product }}</td>
+                         <td>
+                             <a href="{% url 'orders:cart_remove' item.product.id %}"  class="btn btn-sm btn-outline-danger rounded-circle">➖ </a>
+                             <span class="mx-2">{{ item.quantity }}</span>
+                             <a href="{% url 'orders:cart_increase' item.product.id %}" class="btn btn-sm btn-outline-success rounded-circle">➕</a>
+                        </div>
+                         </td>
+                         <td class="text-success fw-bold">${{ item.price }}</td>
+                         <td class="text-danger fw-bold">${{ item.total_price }}</td>
+                         <td class="text-danger fw-bold"><a href="{% url 'orders:cart_delete' item.product.id %}">remove</a></td>
+                     </tr>
+                     {% endfor %}
+                     <tr>
+                       
+                </tbody>
+             </table>
+         </div>
+         <div class="text-end fw-bold fs-5 text-success my-3">
+            جمع کل: ${{ cart.get_total_price }}
+        </div>
+         
+         <div class="card-footer text-center bg-danger bg-opacity-10" style="border-bottom-left-radius: 15px; border-bottom-right-radius: 15px;">
+             <a  href="{% url 'home:home' %}" class="btn btn-danger px-4 py-2 fw-bold">🛒 ادامه خرید</a>
+             <a href="{% url 'orders:order_create' %}" class="btn btn-success px-4 py-2 fw-bold">💳 پرداخت نهایی</a>
+         </div>
+     </div>
+ </div>
+ {% endblock content %}
+ 
+
+
